@@ -9,21 +9,29 @@ A comprehensive machine learning project for predicting used car prices using va
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Dataset](#dataset)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Usage](#usage)
+- [Problem Statement: Predicting Market Price of Used Cars](#-problem-statement-predicting-market-price-of-used-cars)
+  - [Background](#-background)
+  - [Importance](#-importance)
+  - [Project Objectives](#️-project-objectives)
+  - [Data Science Approach](#-data-science-approach)
+- [Solution Overview](#-solution-overview)
+- [Dataset](#-dataset)
+- [High-level Approach and Methods Used](#-high-level-approach-and-methods-used)
+- [Project Structure](#-project-structure)
+- [Installation](#-installation)
+- [Usage](#-usage)
   - [Running the Notebook](#running-the-notebook)
   - [Making Predictions](#making-predictions)
   - [Interactive Price Prediction Dashboard](#interactive-price-prediction-dashboard)
-- [Methodology](#methodology)
-- [Models Evaluated](#models-evaluated)
-- [Results](#results)
-- [Technologies Used](#technologies-used)
-- [Key Insights](#key-insights)
-- [Future Improvements](#future-improvements)
+- [Methodology](#-methodology)
+- [Models Evaluated](#-models-evaluated)
+- [Results](#-results)
+- [Technologies Used](#-technologies-used)
+- [Key Insights](#-key-insights)
+- [Future Improvements](#-future-improvements)
+- [Notes](#-notes)
+- [License](#-license)
+- [Acknowledgments](#-acknowledgments)
 
 # 🧩 Problem Statement: Predicting Market Price of Used Cars
 
@@ -48,26 +56,13 @@ A comprehensive machine learning project for predicting used car prices using va
 
 ## 🎯 Solution Overview
 
-This project implements an end-to-end machine learning pipeline for predicting used car prices in the Indian market. The solution includes:
+This project implements an end-to-end machine learning pipeline for predicting used car prices in the Indian market with high accuracy (R² = 0.950) and realistic price range predictions.
 
 > **🚀 Try the Interactive Dashboard**: 
 > - **🌐 Live Demo**: [**Access the deployed dashboard on Hugging Face Spaces**](https://huggingface.co/spaces/vimalkanagaraj/used-car-price-prediction)
 > - **📓 Notebook**: Run the notebook and launch the Gradio interface (Cells 80-89) to get a shareable public URL for the price prediction dashboard. The URL will be displayed in the notebook output when you run Cell 89.
 
-- **Comprehensive Data Cleaning**: Handling missing values, normalizing units, and extracting features from mixed-format columns
-- **Enhanced Preprocessing**: 
-  - **KNN Imputation**: Using K-Nearest Neighbors imputation (n_neighbors=5) for sophisticated missing value handling
-  - **Polynomial Features**: Generating interaction features (degree=2, interaction_only=True) to capture feature relationships
-  - Standard scaling for numerical features
-- **Advanced Feature Engineering**: Creating derived features like car age, km/year, frequency encodings, and residual encodings
-- **Multiple Model Evaluation**: Comparing baseline and advanced models including Ridge, Random Forest, XGBoost, CatBoost, and LightGBM
-- **Target Encoding**: Using target encoding for high-cardinality categorical features
-- **Quantile Regression**: Providing prediction intervals for uncertainty estimation (5th, 50th, 95th percentiles)
-- **Model Interpretability**: SHAP analysis for feature importance
-- **Error Analysis**: Systematic analysis of prediction patterns (underprediction for luxury cars, overprediction for rare fuel types)
-- **Production-Ready Inference**: Serialized models and inference function for deployment
-- **Google Drive Integration**: Persistent storage of model artifacts in Google Drive for Colab sessions
-- **Interactive Dashboard**: Gradio-based web interface for real-time price range predictions
+The solution combines sophisticated data preprocessing, advanced feature engineering, and state-of-the-art machine learning techniques including KNN imputation, polynomial interaction features, target encoding, and quantile regression. For detailed methodology, see the [High-level Approach and Methods Used](#-high-level-approach-and-methods-used) section below.
 
 ## 📊 Dataset
 
@@ -96,28 +91,188 @@ The dataset contains information about **8,128 used cars** with the following at
 
 **Dataset Source:** The dataset is loaded from the IISC Data Catalysts GitHub repository. The original dataset is maintained by Kaggle team - [Kaggle](https://www.kaggle.com/datasets/nehalbirla/vehicle-dataset-from-cardekho). This has been downloaded from Kaggle and uploaded into GitHub for ease of access.
 
-## 🔧 Features
+## 🎯 High-level Approach and Methods Used
 
-### Data Preprocessing
-- **KNN Imputation**: Uses K-Nearest Neighbors (n_neighbors=5) to impute missing values based on similar observations (more sophisticated than median imputation)
-- Missing value imputation (constant for categorical)
-- Unit normalization (km/kg → kmpl, kgm → Nm)
-- String parsing for mixed-format columns (mileage, engine, max_power, torque)
-- RPM extraction from complex torque strings
-- **Polynomial Features**: Generates interaction features (degree=2, interaction_only=True) to capture multiplicative relationships between features
-- Standard scaling for numerical features
+This project follows a systematic end-to-end machine learning pipeline designed to predict used car prices with high accuracy and interpretability. The approach combines sophisticated data preprocessing, advanced feature engineering, and state-of-the-art machine learning techniques.
 
-### Feature Engineering
-- **Derived Features**: Car age, kilometers per year, abnormal usage flags
-- **Frequency Encoding**: Normalized frequency of make and model occurrences
-- **Residual Encoding**: Model-specific price deviations from overall mean
-- **Log Transformation**: Applied to target variable to handle right-skewed distribution
+### Overall Workflow
 
-### Model Training
-- Stratified train-test split (85% train, 15% test)
-- Cross-validation with honest target encoding
-- Early stopping for gradient boosting models
-- Hyperparameter tuning for optimal performance
+The solution implements a **multi-stage pipeline** that progresses from raw data to production-ready predictions:
+
+1. **Data Understanding & Exploration**: Comprehensive analysis of data structure, missing values, distributions, and relationships
+2. **Data Cleaning & Normalization**: Parsing mixed-format strings, unit normalization, and handling missing values
+3. **Feature Engineering**: Creating derived features and encoding strategies
+4. **Enhanced Preprocessing**: Advanced imputation and feature transformation
+5. **Model Training & Evaluation**: Multiple model comparison with cross-validation
+6. **Advanced Modeling**: Target encoding and quantile regression for uncertainty estimation
+7. **Model Deployment**: Serialization and interactive dashboard creation
+
+### Data Cleaning and Preprocessing Methods
+
+#### String Parsing and Normalization
+- **Car Name Parsing**: Extracts make (brand) and model from full car names using string splitting
+- **Mileage Normalization**: Converts mixed units (kmpl/km/kg) to standardized kmpl using fuel density ratios
+  - Petrol: 0.74 kg/L, Diesel: 0.832 kg/L, LPG: 0.51 kg/L, CNG: 0.615 kg/L
+- **Engine Extraction**: Parses engine displacement from strings like "1248 CC" to numeric values
+- **Max Power Extraction**: Extracts power values from strings like "74 bhp" to numeric values
+- **Torque Processing**: Complex parsing of torque strings to extract:
+  - Torque value (normalized to Nm, converting kgm → Nm using factor 9.80665)
+  - RPM information from various formats (ranges, +/- notation, single values)
+
+#### Missing Value Handling
+- **KNN Imputation** (n_neighbors=5): Uses K-Nearest Neighbors algorithm to impute missing values in numerical features based on similarity to other observations. This is more sophisticated than median imputation as it considers relationships between features.
+- **Constant Imputation**: Missing categorical values are filled with 'missing' category
+- **Missing Data Pattern**: ~221 missing values across mileage, engine, max_power, torque, and seats columns
+
+### Feature Engineering Strategy
+
+#### Derived Temporal and Usage Features
+- **Car Age**: Calculated as `current_year - manufacturing_year` (minimum age set to 1 year)
+- **Kilometers per Year**: Computed as `kms_driven / age` to normalize usage intensity
+- **Abnormal Usage Flags**: Identifies cars with unusually high km/year ratios
+
+#### Encoding Strategies
+- **Frequency Encoding**: 
+  - Normalized frequency of make and model occurrences in the dataset
+  - Captures brand/model popularity as a proxy for market demand
+- **Residual Encoding**: 
+  - Model-specific price deviations from overall mean log price
+  - Captures model-specific pricing patterns that aren't explained by other features
+- **One-Hot Encoding**: Applied to low-cardinality categorical features (fuel, transmission, owner)
+- **Target Encoding**: Used for high-cardinality categorical features (make, model) with cross-validation to prevent data leakage
+
+#### Target Transformation
+- **Log Transformation**: Applied `log1p()` transformation to the target variable (selling_price) to handle right-skewed distribution
+- This transformation improves model performance and prediction accuracy
+
+### Enhanced Preprocessing Pipeline
+
+The preprocessing pipeline consists of three main stages applied sequentially:
+
+1. **KNN Imputation** (n_neighbors=5):
+   - Imputes missing numerical values by finding the 5 most similar observations
+   - More accurate than median imputation as it considers feature relationships
+
+2. **Standard Scaling**:
+   - Normalizes numerical features to have zero mean and unit variance
+   - Essential for models sensitive to feature scales
+
+3. **Polynomial Features** (degree=2, interaction_only=True):
+   - Generates interaction features between pairs of numerical features
+   - Captures multiplicative relationships (e.g., age × kms_driven, age × max_power)
+   - `interaction_only=True` means only interaction terms are created, not squared terms
+   - Expands feature space to capture non-linear relationships
+
+### Model Training Strategy
+
+#### Baseline Models
+The approach starts with simple baseline models to establish performance benchmarks:
+- **Ridge Regression**: Linear model with L2 regularization, trained with enhanced preprocessing pipeline
+- **Random Forest**: Ensemble of decision trees capturing non-linear relationships
+
+#### Advanced Gradient Boosting Models
+Multiple gradient boosting frameworks are evaluated:
+- **XGBoost**: Gradient boosting with regularization and subsampling
+- **CatBoost**: Native categorical feature handling without explicit encoding
+- **LightGBM**: Fast gradient boosting with low memory usage
+
+#### Ensemble Methods
+- **Stacking Ensemble**: Meta-learner that combines predictions from multiple base models
+- Uses a second-level model to learn optimal combination weights
+
+#### Advanced Techniques
+
+**Target Encoding with Cross-Validation**:
+- Implements "honest" target encoding using 5-fold cross-validation
+- For high-cardinality features (make, model with 2,058 unique values), target encoding is computed on out-of-fold data to prevent data leakage
+- Encoding values are computed separately for each fold, ensuring the model never sees encoding statistics from the same fold it's being trained on
+
+**Quantile Regression**:
+- Trains separate LightGBM models for 5th, 50th, and 95th percentiles
+- Provides prediction intervals (lower bound, median, upper bound) for uncertainty estimation
+- Enables 90% prediction interval coverage, giving realistic price ranges rather than point estimates
+
+**Early Stopping**:
+- Uses validation sets to prevent overfitting
+- Stops training when validation performance stops improving
+
+### Model Evaluation Approach
+
+#### Train-Test Split
+- **Stratified Split**: 85% training, 15% test set
+- Ensures representative distribution across data
+
+#### Cross-Validation
+- **5-Fold Cross-Validation**: Evaluates model robustness across different data splits
+- Provides R² score distribution across folds
+- Used for both model comparison and honest target encoding
+
+#### Performance Metrics
+- **R² Score**: Primary metric for model evaluation (coefficient of determination)
+- **RMSE**: Root Mean Squared Error in original price scale (₹)
+- **MAE**: Mean Absolute Error in original price scale (₹)
+- **Prediction Interval Coverage**: Percentage of test samples falling within 90% prediction intervals
+
+### Model Selection and Final Architecture
+
+**Selected Model**: LightGBM with Target Encoding
+
+**Why LightGBM?**
+- Achieved best balance between accuracy (R² = 0.950) and training efficiency
+- Handles large feature spaces efficiently (76 features after polynomial expansion)
+- Fast training time compared to other gradient boosting frameworks
+
+**Final Model Architecture**:
+1. **Preprocessing Pipeline**: KNN imputation → Standard scaling → Polynomial features (for numerical features)
+2. **One-Hot Encoding**: Applied to low-cardinality categorical features (fuel, transmission, owner)
+3. **Target Encoding**: Cross-validated encoding for high-cardinality features (make, model)
+4. **Feature Combination**: Concatenates preprocessed numerical features, one-hot encoded features, and target-encoded features
+5. **LightGBM Model**: Trained on combined feature set with early stopping
+6. **Quantile Models**: Three separate LightGBM models for 5th, 50th, and 95th percentiles
+
+### Error Analysis and Model Interpretability
+
+#### Systematic Error Analysis
+- **Luxury Car Underprediction**: Identifies systematic underprediction (-2.69% average error) for premium brands due to limited training data and brand premiums not captured by features
+- **Rare Fuel Type Overprediction**: Identifies overprediction (14.58% average) for LPG/CNG cars due to limited examples (1.2% of dataset)
+
+#### Model Interpretability
+- **SHAP Analysis**: Uses SHAP (SHapley Additive exPlanations) values to understand feature importance
+- Provides insights into which features drive predictions most significantly
+- Helps validate model behavior and identify potential improvements
+
+### Deployment Strategy
+
+#### Model Serialization
+- All preprocessing components, encoders, and models are serialized using `joblib`
+- Artifacts include:
+  - Preprocessing pipeline (KNN imputation, scaling, polynomial features)
+  - Target encoder
+  - Main LightGBM model
+  - Quantile regression models (5th, 50th, 95th percentiles)
+  - Feature metadata (numeric, categorical, high-cardinality feature lists)
+  - Training statistics (frequency maps, residual encodings)
+
+#### Inference Pipeline
+- Replicates exact preprocessing steps from training
+- Handles new car inputs with same feature engineering logic
+- Provides price range predictions (lower, median, upper estimates)
+
+#### Interactive Dashboard
+- **Gradio Interface**: User-friendly web interface for real-time predictions
+- Accepts both required and optional car specifications
+- Displays formatted price ranges with uncertainty estimates
+- Deployed on Hugging Face Spaces for public access
+
+### Key Methodological Innovations
+
+1. **KNN Imputation**: More sophisticated than standard median imputation, considering feature relationships
+2. **Polynomial Interaction Features**: Captures multiplicative relationships between features
+3. **Cross-Validated Target Encoding**: Prevents data leakage in high-cardinality feature encoding
+4. **Quantile Regression**: Provides uncertainty estimates rather than just point predictions
+5. **Comprehensive Error Analysis**: Identifies systematic prediction patterns for model improvement
+
+This approach achieves a **test R² of 0.950** with realistic price range predictions, making it suitable for real-world deployment in used car marketplaces.
 
 ## 📁 Project Structure
 
@@ -299,54 +454,7 @@ The notebook includes Google Drive integration for persistent storage of model a
 
 This ensures model artifacts persist across Colab sessions. When running locally, artifacts are saved to the local `artifacts/` directory.
 
-### Error Analysis
-
-The notebook includes comprehensive error analysis (Cell 78-79) that identifies systematic prediction patterns:
-
-1. **Underprediction for Luxury Cars**:
-   - Average error: -2.69% for luxury/high-end brands
-   - 59.7% of luxury cars are underpriced
-   - Justified by limited training data and brand premiums not captured by features
-
-2. **Overprediction for Rare Fuel Types**:
-   - Average overprediction: 14.58% for LPG/CNG cars
-   - 53.3% of LPG/CNG cars are overpriced
-   - Justified by very limited training data (only 1.2% of dataset) and conversion-related depreciation
-
-This analysis provides insights for model improvement and helps users understand prediction limitations.
-
-### Data Cleaning Pipeline
-
-1. **Name Parsing**: Extract make (brand) and model from car names
-2. **Mileage Normalization**: Convert km/kg to kmpl using fuel density ratios
-3. **Torque Processing**: Extract torque values and normalize units (kgm → Nm)
-4. **RPM Extraction**: Parse RPM information from various formats (ranges, +/- notation)
-
-### Enhanced Preprocessing Pipeline
-
-1. **KNN Imputation**: Uses K-Nearest Neighbors (n_neighbors=5) to impute missing values. This is more sophisticated than median imputation as it considers relationships between features to provide more accurate missing value estimates.
-2. **Standard Scaling**: Normalizes features to have zero mean and unit variance
-3. **Polynomial Features**: Creates interaction features (degree=2, interaction_only=True) to capture multiplicative relationships between features (e.g., age × kms_driven, age × max_power_value). The `interaction_only=True` parameter means only interaction terms are created, not squared terms.
-
-### Feature Engineering
-
-1. **Temporal Features**: Calculate car age from manufacturing year
-2. **Usage Features**: Compute kilometers per year and flag abnormal usage
-3. **Encoding Features**: 
-   - Frequency encoding for make/model popularity
-   - Residual encoding for model-specific price patterns
-4. **Target Transformation**: Apply log1p transformation to handle skewness
-
-### Model Training Strategy
-
-1. **Baseline Models**: Start with simple linear models (Ridge) with enhanced preprocessing (KNN imputation + polynomial features)
-2. **Tree-Based Models**: Evaluate Random Forest, XGBoost, CatBoost, LightGBM
-3. **Ensemble Methods**: Stack multiple models for improved performance
-4. **Advanced Techniques**: 
-   - Target encoding for high-cardinality features (make, model)
-   - Quantile regression for uncertainty estimation
-   - Cross-validation with honest target encoding (out-of-fold predictions)
-   - Early stopping for gradient boosting models
+For detailed information on data cleaning, preprocessing, feature engineering, and model training strategies, refer to the [High-level Approach and Methods Used](#-high-level-approach-and-methods-used) section.
 
 ## 🤖 Models Evaluated
 
