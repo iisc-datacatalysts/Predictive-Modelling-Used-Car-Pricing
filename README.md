@@ -57,13 +57,7 @@ A comprehensive machine learning project for predicting used car prices using va
 ## 🎯 Solution Overview
 
 This project implements an end-to-end machine learning pipeline for predicting used car prices in the Indian market with high accuracy (R² = 0.950) and realistic price range predictions.
-
-> **🚀 Try the Interactive Dashboard**: 
-> - **🌐 Live Demo**: [**Access the deployed dashboard on Hugging Face Spaces**](https://huggingface.co/spaces/vimalkanagaraj/used-car-price-prediction)
-> - **📓 Notebook**: Run the notebook and launch the Gradio interface (Cells 80-89) to get a shareable public URL for the price prediction dashboard. The URL will be displayed in the notebook output when you run Cell 89.
-
-The solution combines sophisticated data preprocessing, advanced feature engineering, and state-of-the-art machine learning techniques including KNN imputation, polynomial interaction features, target encoding, and quantile regression. For detailed methodology, see the [High-level Approach and Methods Used](#-high-level-approach-and-methods-used) section below.
-
+ 
 ## 📊 Dataset
 
 The dataset contains information about **8,128 used cars** with the following attributes:
