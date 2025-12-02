@@ -122,25 +122,32 @@ The dataset contains information about **8,128 used cars** with the following at
 ## 📁 Project Structure
 
 ```
-car-price-prediction/
-├── DSPCourse_Project_UsedCarPricePrediction.ipynb  # Main notebook
-├── README.md                                       # This file
-├── CarData.csv                                     # Dataset (can be loaded from GitHub)
-├── app.py                                          # Standalone Gradio app for Hugging Face deployment
-├── requirements.txt                                # Python dependencies
-├── README_HF.md                                    # Hugging Face Spaces README
-├── DEPLOYMENT_GUIDE.md                             # Deployment instructions
-├── QUICK_START.md                                  # Quick deployment guide
-├── TROUBLESHOOTING.md                              # Troubleshooting guide
-└── artifacts/                                      # Saved models (generated after running)
-    ├── preprocessor_lgb.joblib                    # Preprocessing pipeline
-    ├── target_encoder.joblib                       # Target encoder
-    ├── lgb_model.txt                               # Main LightGBM model
-    ├── lgb_quantile_5.txt                          # 5th percentile quantile model
-    ├── lgb_quantile_50.txt                         # 50th percentile quantile model
-    ├── lgb_quantile_95.txt                         # 95th percentile quantile model
-    ├── feature_metadata.joblib                     # Feature metadata
-    └── training_stats.joblib                       # Training statistics
+Predictive-Modelling-Used-Car-Pricing/
+├── README.md                                       # Main project documentation
+├── LICENSE                                         # License file
+├── requirements.txt                                # Python dependencies for the entire project
+├── data/
+│   └── CarData.csv                                 # Dataset (can also be loaded from GitHub)
+├── code/
+│   ├── notebook/
+│   │   ├── DSPCourse_Project_UsedCarPricePrediction.ipynb  # Main Jupyter notebook
+│   │   └── README.md                              # Notebook-specific documentation
+│   └── interactive-dashboard-ui/
+│       ├── app.py                                 # Standalone Gradio app for Hugging Face deployment
+│       ├── requirements.txt                       # Dashboard-specific dependencies
+│       ├── README.md                              # Dashboard documentation
+│       ├── DEPLOYMENT_GUIDE.md                    # Deployment instructions
+│       ├── QUICK_START.md                         # Quick deployment guide
+│       ├── LICENSE                                # License file
+│       └── artifacts/                             # Saved models (generated after running notebook)
+│           ├── preprocessor_lgb.joblib            # Preprocessing pipeline
+│           ├── target_encoder.joblib              # Target encoder
+│           ├── lgb_model.txt                      # Main LightGBM model
+│           ├── lgb_quantile_5.txt                 # 5th percentile quantile model
+│           ├── lgb_quantile_50.txt                # 50th percentile quantile model
+│           ├── lgb_quantile_95.txt                # 95th percentile quantile model
+│           ├── feature_metadata.joblib            # Feature metadata
+│           └── training_stats.joblib              # Training statistics
 ```
 
 ## 🚀 Installation
