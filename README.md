@@ -47,6 +47,26 @@ This project implements an end-to-end machine learning pipeline for predicting u
 - **Production-Ready Inference**: Serialized models and inference function for deployment
 - **Google Drive Integration**: Persistent storage of model artifacts in Google Drive for Colab sessions
 - **Interactive Dashboard**: Gradio-based web interface for real-time price range predictions
+# 🧩 Problem Statement: Predicting Market Price of Used Cars
+
+## 📍 Background
+- **Challenge:** Buyers and sellers struggle to determine the fair market value of used cars.
+- **Cause:** Lack of accurate, data-driven estimates.
+  - Manual inspection and estimation are inconsistent and inaccurate.
+  - Different platforms show wide price variance.
+
+## 🎯 Importance
+- **For Customers:** Builds transparency and trust.
+- **For Businesses (Marketplaces, Dealerships):**
+  - Enables automated, reliable price prediction for informed decisions.
+  - Reduces negotiation gaps, increasing sales conversions.
+
+## 🛠️ Project Objectives
+- Build a data-driven model to predict the market price of used cars based on their features.
+- Ensure model interpretability and deliver a deployable pipeline.
+
+## 🧠 Data Science Approach
+- Leverage historical listings and feature engineering to learn price drivers.
 
 ## 📊 Dataset
 
